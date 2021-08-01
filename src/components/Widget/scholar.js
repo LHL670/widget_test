@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import './scholar.css';
 //import './script';
 import $ from 'jquery';
-import {returnSchalor} from './firebase_interface';
-const scholar = () => {
+
+const scholar = (returnSchalor) => {
 		
 		//console.log(returnSchalor);
 		class ScholarData extends React.Component {

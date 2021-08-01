@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Config from '../../config';
 import './widget.css';
 import scholar from './scholar';
-
+import {returnSchalor} from './firebase_interface';
 const widgetName = Config.name;
 
 class Widget extends React.Component {
@@ -17,7 +17,7 @@ class Widget extends React.Component {
     render() {
         if (this.state.message) {
             return (
-                <div >{scholar()}</div>
+                <div >{scholar(returnSchalor)}</div>
                 
             );
         }
