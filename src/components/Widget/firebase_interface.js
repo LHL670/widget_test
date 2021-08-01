@@ -2,6 +2,7 @@ import db from './connect';
 var returnSchalor={};
 
 function getdata(data){
+	
 	db.collection('cguscholar').where('id','==','faE3_ksAAAAJ').get().then(snapshot => {
 		snapshot.docs.forEach(doc => {
 			//console.log(doc.data());
@@ -23,4 +24,3 @@ function getdata(data){
 getdata();
 //console.log(returnSchalor);
 export {returnSchalor};
-

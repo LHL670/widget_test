@@ -15,9 +15,10 @@ class Widget extends React.Component {
     }
 
     render() {
+        const sid=this.state.message;
         if (this.state.message) {
             return (
-                <div >{scholar(returnSchalor)}</div>
+                <div >{scholar({returnSchalor,sid})}</div>
                 
             );
         }

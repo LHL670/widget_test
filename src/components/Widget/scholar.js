@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import './scholar.css';
 //import './script';
 import $ from 'jquery';
+import { getdata } from './firebase_interface';
+const scholar = ({returnSchalor,sid}) => {
+		console.log(sid);
 
-const scholar = (returnSchalor) => {
-		
 		//console.log(returnSchalor);
 		class ScholarData extends React.Component {
 			constructor(props){ 
