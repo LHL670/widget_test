@@ -1,23 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
 import './scholar.css';
-//import './script';
 import $ from 'jquery';
-import  getdata  from './firebase_interface';
-const scholar = ({returnSchalor}) => {
-		
-		console.log(returnSchalor);
-		class ScholarData extends React.Component {
+
+const citations = ({returnSchalor,sid}) => {
+		console.log(sid);
+
+		//console.log(returnSchalor);
+		class Citations extends React.Component {
 			constructor(props){ 
 				super(props);
 				this.state = {
 				citations: '',
-				email: '',
-				h_index: '',
-				id: '',
-				name: '',
-				picture: '',
-				school_icon: '',
 
 				};
 			}
@@ -27,12 +21,6 @@ const scholar = ({returnSchalor}) => {
 				if (data) {
 					this.setState({
 						citations: data.citations,
-						email: data.email,
-						h_index: data.h_index,
-						id: data.id,
-						name: data.name,
-						picture: data.picture,
-						school_icon: data.school_icon,
 					});
 				}
 			
@@ -91,10 +79,10 @@ const scholar = ({returnSchalor}) => {
 			}
 		}
 		ReactDOM.render(
-			<ScholarData source={returnSchalor}/>,
+			<Citations source={returnSchalor}/>,
 			document.getElementById('root')
 		);
 	
 }
 
-export default scholar;
+export default citations;

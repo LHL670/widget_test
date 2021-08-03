@@ -1,12 +1,15 @@
 import db from './connect';
 var returnSchalor={};
 
-function getdata(data){
 	
-	db.collection('cguscholar').where('id','==','faE3_ksAAAAJ').get().then(snapshot => {
-		snapshot.docs.forEach(doc => {
+function getdata(sid){
+	
+	const ID=sid;
+	console.log(ID);
+	var temp={};
+	db.collection('cguscholar').doc(`${ID}`).get().then(doc => {
 			//console.log(doc.data());
-			data={
+			temp={
 				citations: doc.data().citations,
 				email: doc.data().email,
 				h_index: doc.data().h_index,
@@ -15,12 +18,17 @@ function getdata(data){
 				picture: doc.data().picture,
 				school_icon: doc.data().school_icon,
 			}
-			returnSchalor=data;
+			returnSchalor=temp;
+			console.log(returnSchalor);
+			
 		});
-	});
 	
-}
+	//console.log(returnSchalor);
 
-getdata();
-//console.log(returnSchalor);
-export {returnSchalor};
+}
+/*var i={};
+i=getdata();
+console.log(i);*/
+
+
+export default getdata;
