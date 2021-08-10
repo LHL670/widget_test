@@ -1,17 +1,23 @@
 import db from './connect';
-var returnSchalor={data:2};
+var returnSchalor=undefined;
 	
 export default function getdata(sid){
-	//console.log(SID);
-	const ID=sid;
-	console.log("id"+ID);
 	
-	const promise=db.collection('cguscholar').doc(`${ID}`).get()
+	const ID=sid;
+	console.log("id:"+ID);
+	
+	const promise= db.collection('cguscholar').doc(`${ID}`).get()
 	
 	const p2= promise.then(snapshot => {
-		const temp=snapshot.data();
-		console.log("temp:"+temp);
-		
+		console.log('database');
+		var temp=undefined
+		if (snapshot.exists){
+			temp=snapshot.data();
+			console.log("temp:"+temp);
+		}
+		else{
+			console.log("No such document!");
+		}
 		//console.log("test"+doc.data());
 		/*temp={
 			citations: doc.data().citations,
@@ -20,13 +26,16 @@ export default function getdata(sid){
 			name: doc.data().name,
 			picture: doc.data().picture,
 		}*/
-		returnSchalor=temp;		
+		returnSchalor=temp
 	});
 	p2.catch(error => {
 		console.log(error);
+		returnSchalor=error;		
 	});
-	console.log("re:"+returnSchalor);
+	console.log("return:"+returnSchalor);
+	
 	return returnSchalor;
 			
 }
+
 

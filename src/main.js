@@ -27,7 +27,7 @@ function app(window) {
         console.log(rawData);
         let data = JSON.parse(rawData);
 
-        window[widgetName] = data.name;
+        window[widgetName] = data.id;
 
         let placeholder = {};
         (placeholder.q = []).push(['init', data.config]);
@@ -66,7 +66,7 @@ function apiHandler(api, params) {
     let config = window[widgetConfigName];
 
     console.log(`Handling API call ${api}`, params, config);
-
+    console.log(window[widgetName]);
     switch (api) {
         case 'init':
             config = Object.assign({}, config, params);
@@ -76,11 +76,12 @@ function apiHandler(api, params) {
             // call methods as needed
             widgetComponent = React.createRef();
             ReactDOM.render(<Widget ref={widgetComponent} />, document.getElementById(config.targetElementId));
+            widgetComponent.current.setMessage(window[widgetName]);
             break;
-        case 'message':
+        /*case 'message':
             // Send the message to the current widget instance
             widgetComponent.current.setMessage(params);
-            break;
+            break;*/
         default:
             throw Error(`Method ${api} is not supported`);
     }
