@@ -4,9 +4,9 @@ import './scholar.css';
 import H_index from './h_index';
 import Citations_color from './citations_color';
 import Citations from './citations';
-const scholar = (returnSchalor) => {
+const scholar = (id) => {
 
-		console.log(returnSchalor);
+		console.log(id);
 		class ScholarData extends React.Component {
 			constructor(props){ 
 				super(props);
@@ -59,7 +59,7 @@ const scholar = (returnSchalor) => {
 			}
 		}
 		ReactDOM.render(
-			<ScholarData source={returnSchalor}/>,
+			<ScholarData source={id}/>,
 			document.getElementById('root')
 		);
 	
