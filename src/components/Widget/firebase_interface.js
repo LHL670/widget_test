@@ -1,7 +1,7 @@
 import db from './connect';
 var returnSchalor=undefined;
 	
-export default function getdata(sid){
+export default function getFirebaseData(sid){
 	
 	const ID=sid;
 	console.log("id:"+ID);

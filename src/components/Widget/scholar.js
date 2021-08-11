@@ -4,6 +4,7 @@ import './scholar.css';
 import H_index from './h_index';
 import Citations_color from './citations_color';
 import Citations from './citations';
+import db from './connect';
 const scholar = (id) => {
 
 		console.log(id);
@@ -11,48 +12,38 @@ const scholar = (id) => {
 			constructor(props){ 
 				super(props);
 				this.state = {
-				citations: '',
-				email: '',
-				h_index: '',
-				name: '',
-				picture: '',
-				school_icon: '',
-
+				message:'',
 				};
 			}
 			componentDidMount() {
 				console.log(this.props.source);
-				const data = this.props.source;
-				if (data) {
-					this.setState({
-						citations: data.citations,
-						email: data.email,
-						h_index: data.h_index,
-						name: data.name,
-						picture: data.picture,
-						school_icon: data.school_icon,
-					});
-				}
-			
+				var self=this;
+				var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
+				firebaseRef.then(function(dataSnapshot){
+					self.setState({
+						message:dataSnapshot.data(),
+					})
+				});
+				
 			}
 			
 			render() {
-				
+							
 				return (
 					<div id="chart" className="chart"> 
 	
 					<div id="school-icon" className="school-icon"></div>	
-					<Citations_color citations={this.state.citations} picture={this.state.picture}/>
+					<Citations_color citations={this.state.message.citations} picture={this.state.message.picture}/>
 					
-					<H_index h_index={this.state.h_index} />
+					<H_index h_index={this.state.message.h_index} />
 		
 					<div className="profile">
 						<div className="name-email">
-							<a id="name-email" href={'https://scholar.google.ca/citations?user='+this.state.id} />
-							<div id="scholar_name" className="name">{this.state.name}</div>
-							<div id="email" className="email">{this.state.email}</div>
+							<a id="name-email" href={'https://scholar.google.ca/citations?user='+this.state.message.id} />
+							<div id="scholar_name" className="name">{this.state.message.name}</div>
+							<div id="email" className="email">{this.state.message.email}</div>
 						</div>
-						<Citations citations={this.state.citations} />
+						<Citations citations={this.state.message.citations} />
 					</div>
 				</div>
 				);

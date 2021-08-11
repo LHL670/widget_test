@@ -25,7 +25,6 @@ class Widget extends React.Component {
     }
     
     render() {
-        console.log(this.state.id);
         if(!this.state.id){
 			return <div className="widget-container"><h1>Welcome to CGU Scholar</h1></div>;
 		}
