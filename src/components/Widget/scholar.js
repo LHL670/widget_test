@@ -18,17 +18,43 @@ const scholar = (id) => {
 			componentDidMount() {
 				console.log(this.props.source);
 				var self=this;
-				var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
-				firebaseRef.then(function(dataSnapshot){
-					self.setState({
-						message:dataSnapshot.data(),
-					})
-				});
+				var timeStamp=undefined;
+
+				var n= Date.now();
+				var currentTime=parseInt(n/1000);
+				console.log("c:"+currentTime);			
 				
+				//checkTimestamp
+				var firebaseTimeRef=db.collection('cguscholar').doc(`${id}`).collection('updata_time').orderBy('time','desc').limit(1).get()
+				firebaseTimeRef.then((dataSnapshot)=>{
+					dataSnapshot.docs.forEach(doc=>{
+						
+						timeStamp=doc.data().time.seconds;
+						console.log("t:"+timeStamp);							
+					})	
+				}).then(()=>{
+					//getFirebaseData
+					console.log("c:"+currentTime);
+					//console.log("t:"+timeStamp);	
+					console.log(currentTime-n);			
+					if(currentTime-n<2592000){
+						var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
+						firebaseRef.then((dataSnapshot)=>{
+								self.setState({
+								message:dataSnapshot.data(),					
+							})		
+						});
+					}
+					else{
+						console.log('Data expired')
+					}
+				})
+				
+								
 			}
 			
 			render() {
-							
+				console.log(this.state.message);
 				return (
 					<div id="chart" className="chart"> 
 	
@@ -46,6 +72,7 @@ const scholar = (id) => {
 						<Citations citations={this.state.message.citations} />
 					</div>
 				</div>
+				
 				);
 			}
 		}
