@@ -18,7 +18,7 @@ const scholar = (id) => {
 			componentDidMount() {
 				console.log(this.props.source);
 				var self=this;
-				var timeStamp=undefined;
+				var timeStamp=1627968540;
 
 				var n= Date.now();
 				var currentTime=parseInt(n/1000);
@@ -36,8 +36,8 @@ const scholar = (id) => {
 					//getFirebaseData
 					console.log("c:"+currentTime);
 					//console.log("t:"+timeStamp);	
-					console.log(currentTime-n);			
-					if(currentTime-n<2592000){
+					console.log(currentTime-timeStamp);			
+					if(currentTime-timeStamp<2592000){
 						var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
 						firebaseRef.then((dataSnapshot)=>{
 								self.setState({
