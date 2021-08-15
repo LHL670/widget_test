@@ -18,11 +18,11 @@ const scholar = (id) => {
 			componentDidMount() {
 				console.log(this.props.source);
 				var self=this;
-				var timeStamp=1627968540;
+				var timeStamp=undefined;
 
 				var n= Date.now();
 				var currentTime=parseInt(n/1000);
-				console.log("c:"+currentTime);			
+				console.log("c1:"+currentTime);			
 				
 				//checkTimestamp
 				var firebaseTimeRef=db.collection('cguscholar').doc(`${id}`).collection('updata_time').orderBy('time','desc').limit(1).get()
@@ -30,12 +30,13 @@ const scholar = (id) => {
 					dataSnapshot.docs.forEach(doc=>{
 						
 						timeStamp=doc.data().time.seconds;
-						console.log("t:"+timeStamp);							
+						console.log("t1:"+timeStamp);
+						return timeStamp;							
 					})	
 				}).then(()=>{
 					//getFirebaseData
-					console.log("c:"+currentTime);
-					//console.log("t:"+timeStamp);	
+					console.log("c2:"+currentTime);
+					console.log("t2:"+timeStamp);	
 					console.log(currentTime-timeStamp);			
 					if(currentTime-timeStamp<2592000){
 						var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
