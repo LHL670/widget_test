@@ -1,10 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
 import './scholar.css';
-import H_index from './h_index';
-import Citations_color from './citations_color';
-import Citations from './citations';
+
 import db from './connect';
+import LargeSize from './largeSize';
 const scholar = (doc) => {
 		const id=doc.id;
 		console.log(id);
@@ -17,7 +16,6 @@ const scholar = (doc) => {
 				};
 			}
 			componentDidMount() {
-				console.log(this.props.source);
 				var self=this;
 				var timeStamp=undefined;
 
@@ -49,33 +47,24 @@ const scholar = (doc) => {
 					}
 					else{
 						console.log('Data expired')
+						
 					}
-				})
-				
-								
+				})			
 			}
 			
 			render() {
 				console.log(this.state.message);
-				return (
-					<div id="chart" className="chart"> 
-	
-					<div id="school-icon" className="school-icon"></div>	
-					<Citations_color citations={this.state.message.citations} picture={this.state.message.picture}/>
-					
-					<H_index h_index={this.state.message.h_index} />
-		
-					<div className="profile">
-						<div className="name-email">
-							<a id="name-email" href={'https://scholar.google.ca/citations?user='+this.state.message.id} />
-							<div id="scholar_name" className="name">{this.state.message.name}</div>
-							<div id="email" className="email">{this.state.message.email}</div>
-						</div>
-						<Citations citations={this.state.message.citations} />
-					</div>
-				</div>
-				
-				);
+				if(doc.size === 'large'){
+					return(
+						<LargeSize message={this.state.message} />
+					);
+				}
+				else if(doc.size === 'medium'){
+					//m size
+				}
+				else if(doc.size === 'small'){
+					//s size
+				}
 			}
 		}
 		ReactDOM.render(
