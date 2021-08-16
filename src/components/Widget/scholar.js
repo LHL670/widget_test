@@ -5,9 +5,10 @@ import H_index from './h_index';
 import Citations_color from './citations_color';
 import Citations from './citations';
 import db from './connect';
-const scholar = (id) => {
-
+const scholar = (doc) => {
+		const id=doc.id;
 		console.log(id);
+
 		class ScholarData extends React.Component {
 			constructor(props){ 
 				super(props);
@@ -20,8 +21,7 @@ const scholar = (id) => {
 				var self=this;
 				var timeStamp=undefined;
 
-				var n= Date.now();
-				var currentTime=parseInt(n/1000);
+				var currentTime=parseInt(Date.now()/1000);
 				console.log("c1:"+currentTime);			
 				
 				//checkTimestamp
@@ -37,8 +37,9 @@ const scholar = (id) => {
 					//getFirebaseData
 					console.log("c2:"+currentTime);
 					console.log("t2:"+timeStamp);	
-					console.log(currentTime-timeStamp);			
-					if(currentTime-timeStamp<2592000){
+					console.log(currentTime-timeStamp);		
+						
+					if(currentTime-timeStamp<2592000){//約1個月
 						var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
 						firebaseRef.then((dataSnapshot)=>{
 								self.setState({
@@ -79,7 +80,7 @@ const scholar = (id) => {
 		}
 		ReactDOM.render(
 			<ScholarData source={id}/>,
-			document.getElementById('root')
+			document.getElementById(`${doc.targetElementId}`)
 		);
 	
 }

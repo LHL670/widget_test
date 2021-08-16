@@ -13,13 +13,17 @@ class Widget extends React.Component {
         super(props);
         this.state = {
             id: null,
+            targetElementId:'root',
+            size:'large',
         };
     }
     componentDidMount() {
-        console.log(this.props.id);        
-        if (this.props.id) {
+        console.log(this.props);  
+        if (this.props) {
             this.setState({
                 id:this.props.id,
+                targetElementId:this.props.root,
+                size:this.props.size,
             });
         }    
     }
@@ -31,7 +35,7 @@ class Widget extends React.Component {
         else{
             return (
                 <div>
-                <div>{scholar(this.state.id)}</div>                
+                <div>{scholar(this.state)}</div>                
                 </div>               
             );
         }        

@@ -9,7 +9,7 @@ const defaultconfig = {
     someDefaultConfiguration: false
 };
 let widgetComponent = null;
-
+let size=null;
 function app(window) {
     console.log(`${widgetName} starting`);
     // If we don't already have a name for widget's global object
@@ -28,7 +28,9 @@ function app(window) {
         let data = JSON.parse(rawData);
 
         window[widgetName] = data.id;
-
+        size=data.size;
+        //console.log(size);
+        
         let placeholder = {};
         (placeholder.q = []).push(['init', data.config]);
 
@@ -75,7 +77,7 @@ function apiHandler(api, params) {
             // get a reference to the created widget component so we can
             // call methods as needed
             widgetComponent = React.createRef();
-            ReactDOM.render(<Widget ref={widgetComponent} id={id}/>, document.getElementById(config.targetElementId));
+            ReactDOM.render(<Widget ref={widgetComponent} id={id} size={size} root={config.targetElementId}/>, document.getElementById(config.targetElementId));
             //widgetComponent.current.setMessage(window[widgetName]);
             break;
         /*case 'message':
