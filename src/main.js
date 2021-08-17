@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ScholarWidget from './components/Widget/scholar';
 import Widget from './components/Widget/Widget';
 import Config from './config';
 
@@ -77,7 +78,7 @@ function apiHandler(api, params) {
             // get a reference to the created widget component so we can
             // call methods as needed
             widgetComponent = React.createRef();
-            ReactDOM.render(<Widget ref={widgetComponent} id={id} size={size} root={config.targetElementId}/>, document.getElementById(config.targetElementId));
+            ReactDOM.render(<ScholarWidget ref={widgetComponent} id={id} size={size} />, document.getElementById(config.targetElementId));
             //widgetComponent.current.setMessage(window[widgetName]);
             break;
         /*case 'message':

@@ -23,6 +23,7 @@ class LargeSize extends React.Component {
                     <div id="email" className="email">{message.email}</div>
                 </div>
                 <Citations citations={message.citations} />
+                
             </div>
         </div>
         

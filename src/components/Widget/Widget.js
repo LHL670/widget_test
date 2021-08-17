@@ -2,10 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import Config from '../../config';
 import './widget.css';
-import scholar from './scholar';
-import getdata from './firebase_interface';
-
-import test from './test';
+import Scholar from './scholar';
 const widgetName = Config.name;
 
 class Widget extends React.Component {
@@ -13,7 +10,6 @@ class Widget extends React.Component {
         super(props);
         this.state = {
             id: null,
-            targetElementId:'root',
             size:'large',
         };
     }
@@ -22,7 +18,6 @@ class Widget extends React.Component {
         if (this.props) {
             this.setState({
                 id:this.props.id,
-                targetElementId:this.props.root,
                 size:this.props.size,
             });
         }    
@@ -35,7 +30,7 @@ class Widget extends React.Component {
         else{
             return (
                 <div>
-                <div>{scholar(this.state)}</div>                
+                <Scholar detail={this.state} />              
                 </div>               
             );
         }        
