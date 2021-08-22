@@ -1,6 +1,10 @@
-function read_cookie(name) {
-    var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
-    result && (result = JSON.parse(result[1]));
-    return result;
+import { instanceOf } from "prop-types";
+import { withCookies, Cookies } from "react-cookie";
+
+function read_cookie(id) {
+    
+    var cookieDataTemp=JSON.stringify(cookies.get(`${id}`));
+    var cookieData=JSON.parse(cookieDataTemp);
+    return cookieData;
    }
-export default read_cookie;
+export default withCookies(read_cookie);

@@ -109,12 +109,11 @@ class ScholarWidget extends React.Component {
 			}
 		}
 		InternetCheck();
-		
 
 		
 		/*//getdataFromCookie
-			if(readCookie) //未過期
-			    //update state
+			if(readCookie(`${id}`)) //未過期
+			    this.setState({ message:readCookie(`${id}`)});
             
             else  //過期
 				if(InternetCheck()) //有連線
@@ -123,25 +122,6 @@ class ScholarWidget extends React.Component {
 						//return object
                             //setCookie
 							    //readCookie
-
-					else  //沒有符合資料
-						//Error:No such data
-
-				else  //沒有連線
-					//Error:Internet disconnect*/
-		
-		/*test
-			if(readCookie(`${id}`)) //未過期
-			    this.setState({ message:readCookie(`${id}`)});
-            
-            else  //過期
-				if(InternetCheck()) //有連線
-					
-					if(getdataFromFirebase()) //有符合資料
-						//return (Value)
-                            //setCookie(Name,Value,Expires)
-							    //this.setState({ message:readCookie(`${id}`)});
-                                    
 
 					else  //沒有符合資料
 						//Error:No such data
