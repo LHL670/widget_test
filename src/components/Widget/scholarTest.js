@@ -119,9 +119,10 @@ class ScholarWidget extends React.Component {
 				if(InternetCheck()) //有連線
 					
 					if(getdataFromFirebase()) //有符合資料
-						//return object
-                            //setCookie
-							    //readCookie
+						//return (Value)
+                            //setCookie(Name,Value,Expires)
+							    //this.setState({ message:readCookie(`${id}`)});
+                                    
 
 					else  //沒有符合資料
 						//Error:No such data

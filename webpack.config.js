@@ -7,7 +7,8 @@ module.exports = (env) => {
     const isProductionBuild = env && env.production;
 
     return [{
-        entry: './src/main.js',
+        entry: ["regenerator-runtime/runtime.js", "./src/main.js"],
+        //entry: './src/main.js',
         mode: 'production',
         output: {
             filename: 'widget.js',
@@ -26,7 +27,7 @@ module.exports = (env) => {
                                 '@babel/preset-react',
                             ],
                             plugins: [
-                                "@babel/plugin-proposal-class-properties",
+                                "@babel/plugin-proposal-class-properties",                       
                             ]
                         }
                     }
