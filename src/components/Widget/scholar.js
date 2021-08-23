@@ -34,6 +34,9 @@ class ScholarWidget extends React.Component {
 		var tomorrow = new Date();
 		tomorrow.setDate(today.getDate()+1);
 		console.log(tomorrow);
+
+		//cookies.remove("faE3_ksAAAAJ");
+
 		async function getdataFromFirebase(id,self){
 			
 			var temp=undefined;
@@ -46,7 +49,7 @@ class ScholarWidget extends React.Component {
 				}
 				else{
 					self.setState({ message:errorObject});
-					console.log("No such document!");
+					console.error("No such document!");
 				}				
 			}).then(()=>{
 				//console.log(temp);
