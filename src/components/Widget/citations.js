@@ -9,7 +9,7 @@ class Citations extends React.Component {
 				
             <div className="user-citations">
                 <div id="citations" className="citations">{citations}</div>
-				
+
             </div>
 
 		);
