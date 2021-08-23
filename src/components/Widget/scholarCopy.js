@@ -25,7 +25,7 @@ class ScholarWidget extends React.Component {
 		
 		const id=this.props.id;
 
-		var self=this;
+		//var self=this;
 		var timeStamp=undefined;
 		var today = new Date();
 		var currentTime=parseInt(Date.now()/1000);
@@ -36,49 +36,50 @@ class ScholarWidget extends React.Component {
 		console.log(tomorrow);
 
 		//checkTimestamp(要改cookie timestamp)
-		var firebaseTimeRef=db.collection('cguscholar').doc(`${id}`).collection('updata_time').orderBy('time','desc').limit(1).get()
-		firebaseTimeRef.then((dataSnapshot)=>{
-			dataSnapshot.docs.forEach(doc=>{
+		// var firebaseTimeRef=db.collection('cguscholar').doc(`${id}`).collection('updata_time').orderBy('time','desc').limit(1).get()
+		// firebaseTimeRef.then((dataSnapshot)=>{
+		// 	dataSnapshot.docs.forEach(doc=>{
 				
-				timeStamp=doc.data().time.seconds;
-				//console.log("t1:"+timeStamp);
-				return timeStamp;							
-			})	
-		}).then(()=>{
-			//getFirebaseData
-			console.log("c2:"+currentTime);
-			console.log("t2:"+timeStamp);	
-			console.log(currentTime-timeStamp);		
+		// 		timeStamp=doc.data().time.seconds;
+		// 		//console.log("t1:"+timeStamp);
+		// 		return timeStamp;							
+		// 	})	
+		// }).then(()=>{
+		// 	//getFirebaseData
+		// 	console.log("c2:"+currentTime);
+		// 	console.log("t2:"+timeStamp);	
+		// 	console.log(currentTime-timeStamp);		
 				
-			if(currentTime-timeStamp<2592000){//約1個月
-				var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
-				firebaseRef.then((dataSnapshot)=>{
-					var temp=dataSnapshot.data();
-					console.log("1");
-					setCookie(id,temp,tomorrow);
-					console.log("2");
-					//cookies.remove("faE3_ksAAAAJ");
-					//console.log(JSON.parse(JSON.stringify(temp)));
+		// 	if(currentTime-timeStamp<2592000){//約1個月
+		// 		var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
+		// 		firebaseRef.then((dataSnapshot)=>{
+		// 			var temp=dataSnapshot.data();
+		// 			console.log("1");
+		// 			setCookie(id,temp,tomorrow);
+		// 			console.log("2");
+		// 			//cookies.remove("faE3_ksAAAAJ");
+		// 			//console.log(JSON.parse(JSON.stringify(temp)));
 
-						/*self.setState({
-						message:dataSnapshot.data(),					
-					})*/		
-				}).catch(error => {
-					console.log(error);							
-				})
-			}
-			else{
-				console.log('Data expired');				
-			}
-		}).then(()=> {
-			console.log("3");
-			this.setState({ message:readCookie(`${id}`)});
-		}).catch(error => {
-			console.log(error);		
-		})
+		// 				/*self.setState({
+		// 				message:dataSnapshot.data(),					
+		// 			})*/		
+		// 		}).catch(error => {
+		// 			console.log(error);							
+		// 		})
+		// 	}
+		// 	else{
+		// 		console.log('Data expired');				
+		// 	}
+		// }).then(()=> {
+		// 	console.log("3");
+		// 	this.setState({ message:readCookie(`${id}`)});
+		// }).catch(error => {
+		// 	console.log(error);		
+		// })
 		
 		//getdataFromFirebase
-		async function getdataFromFirebase(id){
+		//cookies.remove("faE3_ksAAAAJ");
+		async function getdataFromFirebase(id,self){
 			
 			var temp=undefined;
 			var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
@@ -89,16 +90,17 @@ class ScholarWidget extends React.Component {
 					console.log("set fin");
 				}
 				else{
+					self.setState({ message:errorObject});
 					console.log("No such document!");
 				}				
 			}).then(()=>{
-				console.log(temp);
-				
-			}).then(()=>{
-				console.log("return");
-				return temp;
+				//console.log(temp);
+				const Expires=tomorrow;
+				setCookie(id,temp,Expires);
+				self.setState({ message:readCookie(id)});
 				
 			}).catch(error => {
+				self.setState({ message:errorObject});
 				console.log(error);							
 			})
 		
@@ -108,7 +110,7 @@ class ScholarWidget extends React.Component {
 				
 			}
 		}
-		console.log("ob:"+getdataFromFirebase(id));
+		//console.log("ob:"+getdataFromFirebase(id));
 		//setCookie
 		function setCookie(Name,Value,Expires) {  
 			try{
@@ -123,6 +125,7 @@ class ScholarWidget extends React.Component {
 			try{
 				var cookieDataTemp=JSON.stringify(cookies.get(`${Name}`));
 				var cookieData=JSON.parse(cookieDataTemp);
+				//console.log(cookieData);
 				return cookieData;
 			}
 			catch(err){
@@ -140,35 +143,29 @@ class ScholarWidget extends React.Component {
 				return false;
 			}
 		}
-		InternetCheck();
-		
-
+		//InternetCheck();
 		
 		
-		/*test
-			if(readCookie(`${id}`)) //未過期
-			    this.setState({ message:readCookie(`${id}`)});
-            
-            else  //過期
-				if(InternetCheck()) //有連線
-					
-					if(getdataFromFirebase()) //有符合資料
-						//return (Value)
-                            //setCookie(Name,Value,Expires)
-							    //this.setState({ message:readCookie(`${id}`)});
-                                    
-
-					else  //沒有符合資料
-						//Error:No such data
-
-				else  //沒有連線
-					//Error:Internet disconnect*/
-							
+			if(readCookie(id)){ //未過期
+			    this.setState({ message:readCookie(id)});
+				console.log("readCookie");
+			}
+            else{  //過期
+				if(InternetCheck()){ //有連線
+					var self=this;
+					getdataFromFirebase(id,self); //有符合資料
+					console.log("getdataFromFirebase");	
+				}
+				else{  //沒有連線
+					//Error:Internet disconnect
+					this.setState({ message:errorObject});
+				}
+			}				
 	}	
 	
 	
 	render() {
-		//console.log(this.state.message);
+		console.log(this.state.message);
 		if(this.props.size === 'medium'){
 			//m size
 		}
