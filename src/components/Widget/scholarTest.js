@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import './scholar.css';
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
-
+import 'regenerator-runtime/runtime'
 import db from './connect';
 import LargeSize from './largeSize';
+import { errorObject } from './errorObject';
 class ScholarWidget extends React.Component {
 
 	constructor(props){ 
@@ -76,7 +77,38 @@ class ScholarWidget extends React.Component {
 			console.log(error);		
 		})
 		
+		//getdataFromFirebase
+		async function getdataFromFirebase(id){
+			
+			var temp=undefined;
+			var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
+			firebaseRef.then((dataSnapshot)=>{
+				
+				if (dataSnapshot.exists){
+					setDocument(dataSnapshot.data());
+					console.log("set fin");
+				}
+				else{
+					console.log("No such document!");
+				}				
+			}).then(()=>{
+				console.log(temp);
+				
+			}).then(()=>{
+				console.log("return");
+				return temp;
+				
+			}).catch(error => {
+				console.log(error);							
+			})
 		
+			async function setDocument(data){			
+				temp= data;
+				console.log("set start")
+				
+			}
+		}
+		console.log("ob:"+getdataFromFirebase(id));
 		//setCookie
 		function setCookie(Name,Value,Expires) {  
 			try{
@@ -109,9 +141,11 @@ class ScholarWidget extends React.Component {
 			}
 		}
 		InternetCheck();
+		
 
 		
-		/*//getdataFromCookie
+		
+		/*test
 			if(readCookie(`${id}`)) //未過期
 			    this.setState({ message:readCookie(`${id}`)});
             
@@ -134,7 +168,7 @@ class ScholarWidget extends React.Component {
 	
 	
 	render() {
-		console.log(this.state.message);
+		//console.log(this.state.message);
 		if(this.props.size === 'medium'){
 			//m size
 		}
