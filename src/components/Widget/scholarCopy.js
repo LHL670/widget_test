@@ -35,8 +35,50 @@ class ScholarWidget extends React.Component {
 		tomorrow.setDate(today.getDate()+1);
 		console.log(tomorrow);
 
-		//cookies.remove("faE3_ksAAAAJ");
+		//checkTimestamp(要改cookie timestamp)
+		// var firebaseTimeRef=db.collection('cguscholar').doc(`${id}`).collection('updata_time').orderBy('time','desc').limit(1).get()
+		// firebaseTimeRef.then((dataSnapshot)=>{
+		// 	dataSnapshot.docs.forEach(doc=>{
+				
+		// 		timeStamp=doc.data().time.seconds;
+		// 		//console.log("t1:"+timeStamp);
+		// 		return timeStamp;							
+		// 	})	
+		// }).then(()=>{
+		// 	//getFirebaseData
+		// 	console.log("c2:"+currentTime);
+		// 	console.log("t2:"+timeStamp);	
+		// 	console.log(currentTime-timeStamp);		
+				
+		// 	if(currentTime-timeStamp<2592000){//約1個月
+		// 		var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
+		// 		firebaseRef.then((dataSnapshot)=>{
+		// 			var temp=dataSnapshot.data();
+		// 			console.log("1");
+		// 			setCookie(id,temp,tomorrow);
+		// 			console.log("2");
+		// 			//cookies.remove("faE3_ksAAAAJ");
+		// 			//console.log(JSON.parse(JSON.stringify(temp)));
 
+		// 				/*self.setState({
+		// 				message:dataSnapshot.data(),					
+		// 			})*/		
+		// 		}).catch(error => {
+		// 			console.log(error);							
+		// 		})
+		// 	}
+		// 	else{
+		// 		console.log('Data expired');				
+		// 	}
+		// }).then(()=> {
+		// 	console.log("3");
+		// 	this.setState({ message:readCookie(`${id}`)});
+		// }).catch(error => {
+		// 	console.log(error);		
+		// })
+		
+		//getdataFromFirebase
+		//cookies.remove("faE3_ksAAAAJ");
 		async function getdataFromFirebase(id,self){
 			
 			var temp=undefined;
@@ -49,7 +91,7 @@ class ScholarWidget extends React.Component {
 				}
 				else{
 					self.setState({ message:errorObject});
-					console.error("No such document!");
+					console.log("No such document!");
 				}				
 			}).then(()=>{
 				//console.log(temp);
@@ -101,23 +143,24 @@ class ScholarWidget extends React.Component {
 				return false;
 			}
 		}
-		//InternetCheck();		
+		//InternetCheck();
 		
-		if(readCookie(id)){ //未過期
-			this.setState({ message:readCookie(id)});
-			console.log("readCookie");
-		}
-		else{  //過期
-			if(InternetCheck()){ //有連線
-				var self=this;
-				getdataFromFirebase(id,self); //有符合資料
-				console.log("getdataFromFirebase");	
+		
+			if(readCookie(id)){ //未過期
+			    this.setState({ message:readCookie(id)});
+				console.log("readCookie");
 			}
-			else{  //沒有連線
-				//Error:Internet disconnect
-				this.setState({ message:errorObject});
-			}
-		}				
+            else{  //過期
+				if(InternetCheck()){ //有連線
+					var self=this;
+					getdataFromFirebase(id,self); //有符合資料
+					console.log("getdataFromFirebase");	
+				}
+				else{  //沒有連線
+					//Error:Internet disconnect
+					this.setState({ message:errorObject});
+				}
+			}				
 	}	
 	
 	

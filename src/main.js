@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ScholarWidget from './components/Widget/scholar';
 import Widget from './components/Widget/Widget';
 import Config from './config';
+import { CookiesProvider } from "react-cookie";
 
 const widgetName = Config.name;
 const widgetConfigName = widgetName + 'Config'
@@ -9,7 +11,7 @@ const defaultconfig = {
     someDefaultConfiguration: false
 };
 let widgetComponent = null;
-
+let size=null;
 function app(window) {
     console.log(`${widgetName} starting`);
     // If we don't already have a name for widget's global object
@@ -27,8 +29,10 @@ function app(window) {
         console.log(rawData);
         let data = JSON.parse(rawData);
 
-        window[widgetName] = data.name;
-
+        window[widgetName] = data.id;
+        size=data.size;
+        //console.log(size);
+        
         let placeholder = {};
         (placeholder.q = []).push(['init', data.config]);
 
@@ -66,7 +70,7 @@ function apiHandler(api, params) {
     let config = window[widgetConfigName];
 
     console.log(`Handling API call ${api}`, params, config);
-
+    let id=window[widgetName];
     switch (api) {
         case 'init':
             config = Object.assign({}, config, params);
@@ -75,12 +79,16 @@ function apiHandler(api, params) {
             // get a reference to the created widget component so we can
             // call methods as needed
             widgetComponent = React.createRef();
-            ReactDOM.render(<Widget ref={widgetComponent} />, document.getElementById(config.targetElementId));
+            ReactDOM.render( <CookiesProvider>
+                            <ScholarWidget ref={widgetComponent} id={id} size={size} />
+                            </CookiesProvider>, 
+                            document.getElementById(config.targetElementId));
+            //widgetComponent.current.setMessage(window[widgetName]);
             break;
-        case 'message':
+        /*case 'message':
             // Send the message to the current widget instance
             widgetComponent.current.setMessage(params);
-            break;
+            break;*/
         default:
             throw Error(`Method ${api} is not supported`);
     }

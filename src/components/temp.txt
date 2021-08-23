@@ -1,0 +1,7 @@
+/*temp={
+	citations: doc.data().citations,
+	email: doc.data().email,
+	h_index: doc.data().h_index,
+	name: doc.data().name,
+	picture: doc.data().picture,
+}*/

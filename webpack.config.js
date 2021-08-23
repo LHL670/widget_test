@@ -7,7 +7,8 @@ module.exports = (env) => {
     const isProductionBuild = env && env.production;
 
     return [{
-        entry: './src/main.js',
+        entry: ["regenerator-runtime/runtime.js", "./src/main.js"],
+        //entry: './src/main.js',
         mode: 'production',
         output: {
             filename: 'widget.js',
@@ -18,7 +19,18 @@ module.exports = (env) => {
                 {
                     test: /\.(js|jsx)$/,
                     exclude: /node_modules/,
-                    use: ['babel-loader']
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                '@babel/preset-env', 
+                                '@babel/preset-react',
+                            ],
+                            plugins: [
+                                "@babel/plugin-proposal-class-properties",                       
+                            ]
+                        }
+                    }
                 },
                 {
                     test: /\.css$/i,

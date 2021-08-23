@@ -2,33 +2,38 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import Config from '../../config';
 import './widget.css';
-import scholar from './scholar';
-import {returnSchalor} from './firebase_interface';
+import Scholar from './scholar';
 const widgetName = Config.name;
 
 class Widget extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            message: null,
+            id: null,
+            size:'large',
         };
     }
-
-    render() {
-        const sid=this.state.message;
-        if (this.state.message) {
-            return (
-                <div >{scholar({returnSchalor,sid})}</div>
-                
-            );
-        }
-        else {
-            return <div className="widget-container"><h1>Welcome to CGU Scholar</h1></div>;
-        }
+    componentDidMount() {
+        console.log(this.props);  
+        if (this.props) {
+            this.setState({
+                id:this.props.id,
+                size:this.props.size,
+            });
+        }    
     }
-
-    setMessage(message){
-        this.setState({message: message});
+    
+    render() {
+        if(!this.state.id){
+			return <div className="widget-container"><h1>Welcome to CGU Scholar</h1></div>;
+		}
+        else{
+            return (
+                <div>
+                <Scholar detail={this.state} />              
+                </div>               
+            );
+        }        
     }
 };
 
