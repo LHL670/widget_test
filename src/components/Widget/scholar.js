@@ -68,7 +68,7 @@ class ScholarWidget extends React.Component {
 				
 			}
 		}
-		//console.log("ob:"+getdataFromFirebase(id));
+		
 		//setCookie
 		function setCookie(Name,Value,Expires) {  
 			try{
