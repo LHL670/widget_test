@@ -7,6 +7,8 @@ import 'regenerator-runtime/runtime'
 import db from './connect';
 import LargeSize from './largeSize';
 import { errorObject } from './errorObject';
+import InternetCheck from './InternetCheck';
+import * as ts from './TimeStamp';
 class ScholarWidget extends React.Component {
 
 	constructor(props){ 
@@ -25,19 +27,13 @@ class ScholarWidget extends React.Component {
 		
 		const id=this.props.id;
 
-		//var self=this;
 		var timeStamp=undefined;
-		var today = new Date();
-		var currentTime=parseInt(Date.now()/1000);
-		//console.log("c1:"+currentTime);
-
-		var tomorrow = new Date();
-		tomorrow.setDate(today.getDate()+1);
-		console.log(tomorrow);
+		timeStamp=ts.afterHourMinuteSecond(0,0,86400)
+		console.log(timeStamp);
 
 		//cookies.remove("faE3_ksAAAAJ");
 
-		async function getdataFromFirebase(id,self){
+		function getdataFromFirebase(id,self){
 			
 			var temp=undefined;
 			var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
@@ -53,7 +49,7 @@ class ScholarWidget extends React.Component {
 				}				
 			}).then(()=>{
 				//console.log(temp);
-				const Expires=tomorrow;
+				const Expires=timeStamp;
 				setCookie(id,temp,Expires);
 				self.setState({ message:readCookie(id)});
 				
@@ -62,7 +58,7 @@ class ScholarWidget extends React.Component {
 				console.log(error);							
 			})
 		
-			async function setDocument(data){			
+			function setDocument(data){			
 				temp= data;
 				console.log("set start")
 				
@@ -90,18 +86,7 @@ class ScholarWidget extends React.Component {
 				console.log(err);			
 			}			
 		}
-		//InternetCheck
-		function InternetCheck(){
-			var ifConnected = window.navigator.onLine;
-			if (ifConnected) {
-				console.log('Connection available');
-				return true;
-			} else {
-				alert('Connection not available');
-				return false;
-			}
-		}
-		//InternetCheck();		
+		//InternetCheck		
 		
 		if(readCookie(id)){ //未過期
 			this.setState({ message:readCookie(id)});
@@ -123,6 +108,7 @@ class ScholarWidget extends React.Component {
 	
 	render() {
 		console.log(this.state.message);
+		
 		if(this.props.size === 'medium'){
 			//m size
 		}
