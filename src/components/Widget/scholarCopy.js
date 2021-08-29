@@ -7,6 +7,9 @@ import 'regenerator-runtime/runtime'
 import db from './connect';
 import LargeSize from './largeSize';
 import { errorObject } from './errorObject';
+import InternetCheck from './InternetCheck';
+import * as ts from './TimeStamp';
+import getdactaFromFirebase from './firebaseInterface';
 class ScholarWidget extends React.Component {
 
 	constructor(props){ 
@@ -25,77 +28,39 @@ class ScholarWidget extends React.Component {
 		
 		const id=this.props.id;
 
-		//var self=this;
 		var timeStamp=undefined;
-		var today = new Date();
-		var currentTime=parseInt(Date.now()/1000);
-		//console.log("c1:"+currentTime);
-
-		var tomorrow = new Date();
-		tomorrow.setDate(today.getDate()+1);
-		console.log(tomorrow);
-
-		//checkTimestamp(要改cookie timestamp)
-		// var firebaseTimeRef=db.collection('cguscholar').doc(`${id}`).collection('updata_time').orderBy('time','desc').limit(1).get()
-		// firebaseTimeRef.then((dataSnapshot)=>{
-		// 	dataSnapshot.docs.forEach(doc=>{
-				
-		// 		timeStamp=doc.data().time.seconds;
-		// 		//console.log("t1:"+timeStamp);
-		// 		return timeStamp;							
-		// 	})	
-		// }).then(()=>{
-		// 	//getFirebaseData
-		// 	console.log("c2:"+currentTime);
-		// 	console.log("t2:"+timeStamp);	
-		// 	console.log(currentTime-timeStamp);		
-				
-		// 	if(currentTime-timeStamp<2592000){//約1個月
-		// 		var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
-		// 		firebaseRef.then((dataSnapshot)=>{
-		// 			var temp=dataSnapshot.data();
-		// 			console.log("1");
-		// 			setCookie(id,temp,tomorrow);
-		// 			console.log("2");
-		// 			//cookies.remove("faE3_ksAAAAJ");
-		// 			//console.log(JSON.parse(JSON.stringify(temp)));
-
-		// 				/*self.setState({
-		// 				message:dataSnapshot.data(),					
-		// 			})*/		
-		// 		}).catch(error => {
-		// 			console.log(error);							
-		// 		})
-		// 	}
-		// 	else{
-		// 		console.log('Data expired');				
-		// 	}
-		// }).then(()=> {
-		// 	console.log("3");
-		// 	this.setState({ message:readCookie(`${id}`)});
-		// }).catch(error => {
-		// 	console.log(error);		
-		// })
+		timeStamp=ts.afterHourMinuteSecond(0,0,86400)
+		console.log(timeStamp);
 		
-		//getdataFromFirebase
-		//cookies.remove("faE3_ksAAAAJ");
+		cookies.remove("faE3_ksAAAAJ");
+		function promiseFn(num, time = 500) {
+			return new Promise((resolve, reject) => {
+			  setTimeout(() => {
+				num ? resolve(`${num}`) : reject('失敗');
+			  }, time);
+			});
+		  }
 		async function getdataFromFirebase(id,self){
 			
 			var temp=undefined;
-			var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
+			var firebaseRef=db.collection('cguscholar').doc(`${id}`).get();
+			const data2 = await promiseFn(2);
+			console.log(data2);
 			firebaseRef.then((dataSnapshot)=>{
 				
 				if (dataSnapshot.exists){
-					setDocument(dataSnapshot.data());
+					//setDocument(dataSnapshot.data());
 					console.log("set fin");
 				}
 				else{
 					self.setState({ message:errorObject});
-					console.log("No such document!");
-				}				
+					console.error("No such document!");
+				}
+				setDocument(getdactaFromFirebase(id));
+				console.log(temp);				
 			}).then(()=>{
-				//console.log(temp);
-				const Expires=tomorrow;
+				console.log(temp);
+				const Expires=timeStamp;
 				setCookie(id,temp,Expires);
 				self.setState({ message:readCookie(id)});
 				
@@ -104,13 +69,13 @@ class ScholarWidget extends React.Component {
 				console.log(error);							
 			})
 		
-			async function setDocument(data){			
+			function setDocument(data){			
 				temp= data;
 				console.log("set start")
 				
 			}
 		}
-		//console.log("ob:"+getdataFromFirebase(id));
+		
 		//setCookie
 		function setCookie(Name,Value,Expires) {  
 			try{
@@ -132,40 +97,29 @@ class ScholarWidget extends React.Component {
 				console.log(err);			
 			}			
 		}
-		//InternetCheck
-		function InternetCheck(){
-			var ifConnected = window.navigator.onLine;
-			if (ifConnected) {
-				console.log('Connection available');
-				return true;
-			} else {
-				alert('Connection not available');
-				return false;
-			}
+		//InternetCheck		
+		
+		if(readCookie(id)){ //未過期
+			this.setState({ message:readCookie(id)});
+			console.log("readCookie");
 		}
-		//InternetCheck();
-		
-		
-			if(readCookie(id)){ //未過期
-			    this.setState({ message:readCookie(id)});
-				console.log("readCookie");
+		else{  //過期
+			if(InternetCheck()){ //有連線
+				var self=this;
+				getdataFromFirebase(id,self); //有符合資料
+				console.log("getdataFromFirebase");	
 			}
-            else{  //過期
-				if(InternetCheck()){ //有連線
-					var self=this;
-					getdataFromFirebase(id,self); //有符合資料
-					console.log("getdataFromFirebase");	
-				}
-				else{  //沒有連線
-					//Error:Internet disconnect
-					this.setState({ message:errorObject});
-				}
-			}				
+			else{  //沒有連線
+				//Error:Internet disconnect
+				this.setState({ message:errorObject});
+			}
+		}				
 	}	
 	
 	
 	render() {
 		console.log(this.state.message);
+		
 		if(this.props.size === 'medium'){
 			//m size
 		}

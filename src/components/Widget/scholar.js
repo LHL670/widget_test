@@ -4,11 +4,11 @@ import './scholar.css';
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
 import 'regenerator-runtime/runtime'
-import db from './connect';
 import LargeSize from './largeSize';
 import { errorObject } from './errorObject';
 import InternetCheck from './InternetCheck';
 import * as ts from './TimeStamp';
+import promise from './firebaseInterface';
 class ScholarWidget extends React.Component {
 
 	constructor(props){ 
@@ -30,38 +30,22 @@ class ScholarWidget extends React.Component {
 		var timeStamp=undefined;
 		timeStamp=ts.afterHourMinuteSecond(0,0,86400)
 		console.log(timeStamp);
+		
+		cookies.remove("faE3_ksAAAAJ");		
 
-		//cookies.remove("faE3_ksAAAAJ");
 
-		function getdataFromFirebase(id,self){
-			
-			var temp=undefined;
-			var firebaseRef=db.collection('cguscholar').doc(`${id}`).get()
-			firebaseRef.then((dataSnapshot)=>{
-				
-				if (dataSnapshot.exists){
-					setDocument(dataSnapshot.data());
-					console.log("set fin");
-				}
-				else{
-					self.setState({ message:errorObject});
-					console.error("No such document!");
-				}				
-			}).then(()=>{
-				//console.log(temp);
+		async function getdataFromFirebase(id,self){
+			try{
 				const Expires=timeStamp;
+				const temp= await promise(id);
+				console.log(temp);
+				
 				setCookie(id,temp,Expires);
 				self.setState({ message:readCookie(id)});
-				
-			}).catch(error => {
+			}
+			catch(err){
 				self.setState({ message:errorObject});
-				console.log(error);							
-			})
-		
-			function setDocument(data){			
-				temp= data;
-				console.log("set start")
-				
+				console.log(err);			
 			}
 		}
 		
