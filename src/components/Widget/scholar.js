@@ -4,11 +4,13 @@ import './scholar.css';
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
 import 'regenerator-runtime/runtime'
-import LargeSize from './largeSize';
-import { errorObject } from './errorObject';
+
 import InternetCheck from './InternetCheck';
 import * as ts from './TimeStamp';
 import promise from './firebaseInterface';
+
+import { errorObject } from './errorObject';
+import LargeSize from './largeSize';
 class ScholarWidget extends React.Component {
 
 	constructor(props){ 
@@ -33,14 +35,17 @@ class ScholarWidget extends React.Component {
 		
 		cookies.remove("faE3_ksAAAAJ");		
 
-
 		async function getdataFromFirebase(id,self){
 			try{
 				const Expires=timeStamp;
 				const temp= await promise(id);
-				console.log(temp);
+				console.log('get data! '+temp);
 				
 				setCookie(id,temp,Expires);
+
+				// setCookie('Expires',Expires,Expires);
+				// console.log(new Date(readCookie('Expires')));
+
 				self.setState({ message:readCookie(id)});
 			}
 			catch(err){
@@ -70,7 +75,7 @@ class ScholarWidget extends React.Component {
 				console.log(err);			
 			}			
 		}
-		//InternetCheck		
+		
 		
 		if(readCookie(id)){ //未過期
 			this.setState({ message:readCookie(id)});
@@ -87,8 +92,7 @@ class ScholarWidget extends React.Component {
 				this.setState({ message:errorObject});
 			}
 		}				
-	}	
-	
+	}		
 	
 	render() {
 		console.log(this.state.message);
@@ -99,8 +103,7 @@ class ScholarWidget extends React.Component {
 		else if(this.props.size === 'small'){
 			//s size
 		}
-		else{
-			
+		else{			
 			return(
 				<div><LargeSize message={this.state.message} />
 				<p>Cookie set successful: {this.props.id}</p></div>
