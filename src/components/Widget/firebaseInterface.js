@@ -1,6 +1,6 @@
 import db from './connect';
 
-export default function promise (id){
+export default function _FromFirebase (id){
 	return new Promise((resolve, reject) => {
 		
 		var temp=undefined;
